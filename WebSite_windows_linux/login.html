@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid OS - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="login-screen" class="screen active">
+        <div class="login-background"></div>
+        <div class="login-container">
+            <div class="profile-container">
+                <div class="profile-icon">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="60" cy="40" r="25" fill="#8E8E8E"/>
+                        <rect x="35" y="65" width="50" height="45" rx="10" fill="#8E8E8E"/>
+                        <circle cx="60" cy="40" r="23" fill="#E0E0E0"/>
+                        <rect x="37" y="67" width="46" height="41" rx="8" fill="#E0E0E0"/>
+                        <circle cx="60" cy="40" r="20" fill="#B0B0B0"/>
+                        <rect x="40" y="70" width="40" height="35" rx="6" fill="#B0B0B0"/>
+                        <circle cx="48" cy="35" r="3" fill="#FFFFFF"/>
+                        <circle cx="72" cy="35" r="3" fill="#FFFFFF"/>
+                        <path d="M55 45 Q60 50, 65 45" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <h2 class="username">João</h2>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Senha" maxlength="20">
+                <button id="login-btn" disabled>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="white"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="login-options">
+                <div class="accessibility">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <circle cx="12" cy="5" r="2" fill="white"/>
+                        <path d="M12 9L7 11L8 13L11 12V17L9 20L11 21L12 18L13 21L15 20L13 17V12L16 13L17 11L12 9Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="shutdown-btn" onclick="showShutdownMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M13 3H11V13H13V3ZM17.83 5.17L16.41 6.59C17.99 7.86 19 9.81 19 12C19 15.87 15.87 19 12 19C8.13 19 5 15.87 5 12C5 9.81 6.01 7.86 7.59 6.59L6.17 5.17C4.23 6.82 3 9.26 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 9.26 19.77 6.82 17.83 5.17Z" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div id="shutdown-menu" class="shutdown-menu hidden">
+            <div class="shutdown-option" onclick="window.location.href='index.html'">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M13 3H11V13H13V3ZM17.83 5.17L16.41 6.59C17.99 7.86 19 9.81 19 12C19 15.87 15.87 19 12 19C8.13 19 5 15.87 5 12C5 9.81 6.01 7.86 7.59 6.59L6.17 5.17C4.23 6.82 3 9.26 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 9.26 19.77 6.82 17.83 5.17Z" fill="white"/>
+                </svg>
+                <span>Desligar</span>
+            </div>
+            <div class="shutdown-option" onclick="window.location.reload()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z" fill="white"/>
+                </svg>
+                <span>Reiniciar</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const passwordInput = document.getElementById('password-input');
+        const loginBtn = document.getElementById('login-btn');
+        
+        passwordInput.addEventListener('input', function() {
+            loginBtn.disabled = this.value.length === 0;
+        });
+        
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !loginBtn.disabled) {
+                attemptLogin();
+            }
+        });
+        
+        loginBtn.addEventListener('click', attemptLogin);
+        
+        function attemptLogin() {
+            const password = document.getElementById('password-input').value;
+            
+            if (password === '12345') {
+                window.location.href = 'desktop.html';
+            } else {
+                const input = document.getElementById('password-input');
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 300);
+            }
+        }
+        
+        function showShutdownMenu() {
+            document.getElementById('shutdown-menu').classList.toggle('hidden');
+        }
+    </script>
+    
+    <style>
+        .shake {
+            animation: shake 0.2s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</body>
+</html>

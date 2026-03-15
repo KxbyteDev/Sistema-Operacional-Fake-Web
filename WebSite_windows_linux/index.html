@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid OS - Windows 11 + Linux</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- TELA DE LOGIN -->
+    <div id="login-screen" class="screen active">
+        <div class="login-background"></div>
+        <div class="login-container">
+            <div class="profile-container">
+                <div class="profile-icon">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="60" cy="40" r="25" fill="#8E8E8E"/>
+                        <rect x="35" y="65" width="50" height="45" rx="10" fill="#8E8E8E"/>
+                        <circle cx="60" cy="40" r="23" fill="#E0E0E0"/>
+                        <rect x="37" y="67" width="46" height="41" rx="8" fill="#E0E0E0"/>
+                        <circle cx="60" cy="40" r="20" fill="#B0B0B0"/>
+                        <rect x="40" y="70" width="40" height="35" rx="6" fill="#B0B0B0"/>
+                    </svg>
+                </div>
+                <h2 class="username">João</h2>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Senha" maxlength="20">
+                <button id="login-btn" disabled>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="white"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="login-options">
+                <div class="accessibility">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <circle cx="12" cy="5" r="2" fill="white"/>
+                        <path d="M12 9L7 11L8 13L11 12V17L9 20L11 21L12 18L13 21L15 20L13 17V12L16 13L17 11L12 9Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="shutdown-btn" onclick="showShutdownMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M13 3H11V13H13V3ZM17.83 5.17L16.41 6.59C17.99 7.86 19 9.81 19 12C19 15.87 15.87 19 12 19C8.13 19 5 15.87 5 12C5 9.81 6.01 7.86 7.59 6.59L6.17 5.17C4.23 6.82 3 9.26 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 9.26 19.77 6.82 17.83 5.17Z" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Shutdown Menu -->
+        <div id="shutdown-menu" class="shutdown-menu hidden">
+            <div class="shutdown-option" onclick="shutdown()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M13 3H11V13H13V3ZM17.83 5.17L16.41 6.59C17.99 7.86 19 9.81 19 12C19 15.87 15.87 19 12 19C8.13 19 5 15.87 5 12C5 9.81 6.01 7.86 7.59 6.59L6.17 5.17C4.23 6.82 3 9.26 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 9.26 19.77 6.82 17.83 5.17Z" fill="white"/>
+                </svg>
+                <span>Desligar</span>
+            </div>
+            <div class="shutdown-option" onclick="restart()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z" fill="white"/>
+                </svg>
+                <span>Reiniciar</span>
+            </div>
+            <div class="shutdown-option" onclick="sleep()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M13 3H11V13H13V3ZM12 22C16.97 22 21 17.97 21 13C21 9.49 18.97 6.43 16 5.03V7.28C18.01 8.54 19.5 10.58 19.5 13C19.5 16.87 16.37 20 12.5 20C8.63 20 5.5 16.87 5.5 13C5.5 10.58 6.99 8.54 9 7.28V5.03C6.03 6.43 4 9.49 4 13C4 17.97 8.03 22 13 22Z" fill="white"/>
+                </svg>
+                <span>Suspender</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- DESKTOP -->
+    <div id="desktop-screen" class="screen">
+        <!-- Wallpaper -->
+        <div class="wallpaper"></div>
+        
+        <!-- Desktop Icons -->
+        <div class="desktop-icons" id="desktop-icons">
+            <div class="desktop-icon" data-name="Lixeira" data-type="recycle" ondblclick="openApp('recycle')">
+                <div class="icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="#A4C8E1"/>
+                    </svg>
+                </div>
+                <span>Lixeira</span>
+            </div>
+            
+            <div class="desktop-icon" data-name="Este Computador" data-type="computer" ondblclick="openApp('computer')">
+                <div class="icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="16" rx="2" fill="#4C9AFF"/>
+                        <rect x="4" y="4" width="16" height="12" rx="1" fill="#FFFFFF"/>
+                        <rect x="8" y="18" width="8" height="2" fill="#8E8E8E"/>
+                    </svg>
+                </div>
+                <span>Este Computador</span>
+            </div>
+            
+            <div class="desktop-icon" data-name="Documentos" data-type="folder" ondblclick="openApp('documents')">
+                <div class="icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6H12L10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6Z" fill="#FFD966"/>
+                    </svg>
+                </div>
+                <span>Documentos</span>
+            </div>
+            
+            <div class="desktop-icon" data-name="Rede" data-type="network" ondblclick="openApp('network')">
+                <div class="icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="18" r="2" fill="#4C9AFF"/>
+                        <path d="M7 13L9 11C10.33 9.67 12.67 9.67 14 11L16 13" stroke="#4C9AFF" stroke-width="2"/>
+                        <path d="M4 9L7 6C9.67 3.33 14.33 3.33 17 6L20 9" stroke="#4C9AFF" stroke-width="2"/>
+                    </svg>
+                </div>
+                <span>Rede</span>
+            </div>
+        </div>
+        
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <div class="taskbar-left">
+                <button class="start-btn" id="start-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="7" height="7" fill="#0078D4"/>
+                        <rect x="13" y="4" width="7" height="7" fill="#0078D4"/>
+                        <rect x="4" y="13" width="7" height="7" fill="#0078D4"/>
+                        <rect x="13" y="13" width="7" height="7" fill="#0078D4"/>
+                    </svg>
+                </button>
+                
+                <button class="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/>
+                        <path d="M16 16L21 21" stroke="white" stroke-width="2"/>
+                    </svg>
+                </button>
+                
+                <button class="task-view-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <rect x="3" y="3" width="8" height="8" fill="white"/>
+                        <rect x="13" y="3" width="8" height="8" fill="white"/>
+                        <rect x="3" y="13" width="8" height="8" fill="white"/>
+                        <rect x="13" y="13" width="8" height="8" fill="white"/>
+                    </svg>
+                </button>
+                
+                <div class="taskbar-icons" id="taskbar-icons">
+                    <!-- Icons de apps abertos aparecem aqui via JS -->
+                </div>
+            </div>
+            
+            <div class="taskbar-right">
+                <div class="tray-icon network" onclick="openNetworkPopup()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" fill="white"/>
+                        <path d="M7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17C9.24 17 7 14.76 7 12Z" stroke="white" stroke-width="2"/>
+                        <path d="M4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12" stroke="white" stroke-width="2"/>
+                    </svg>
+                </div>
+                
+                <div class="tray-icon volume" onclick="openVolumePopup()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M3 9V15H7L12 20V4L7 9H3Z" fill="white"/>
+                        <path d="M16 7C16 7 18 9 18 12C18 15 16 17 16 17" stroke="white" stroke-width="2"/>
+                        <path d="M19 4C19 4 22 7 22 12C22 17 19 20 19 20" stroke="white" stroke-width="2"/>
+                    </svg>
+                </div>
+                
+                <div class="tray-icon battery">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <rect x="4" y="8" width="16" height="8" rx="1" stroke="white" stroke-width="2"/>
+                        <rect x="20" y="11" width="2" height="2" fill="white"/>
+                        <rect x="6" y="10" width="12" height="4" fill="white"/>
+                    </svg>
+                </div>
+                
+                <div class="datetime" onclick="openCalendar()">
+                    <span class="time" id="current-time">15:45</span>
+                    <span class="date" id="current-date">15/03/2026</span>
+                </div>
+                
+                <div class="tray-icon notifications" onclick="openNotificationCenter()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="white"/>
+                        <circle cx="12" cy="22" r="2" fill="white"/>
+                    </svg>
+                    <span class="notification-badge hidden">3</span>
+                </div>
+                
+                <div class="show-desktop" onclick="showDesktop()"></div>
+            </div>
+        </div>
+        
+        <!-- Start Menu -->
+        <div id="start-menu" class="start-menu hidden">
+            <div class="start-header">
+                <div class="user-profile">
+                    <div class="user-icon-small">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="12" r="8" fill="#8E8E8E"/>
+                            <rect x="12" y="20" width="16" height="15" rx="3" fill="#8E8E8E"/>
+                            <circle cx="20" cy="12" r="6" fill="#E0E0E0"/>
+                            <rect x="14" y="22" width="12" height="11" rx="2" fill="#E0E0E0"/>
+                        </svg>
+                    </div>
+                    <span class="user-name">João</span>
+                </div>
+                <div class="power-options">
+                    <button class="power-btn" onclick="showShutdownMenu()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M13 3H11V13H13V3ZM17.83 5.17L16.41 6.59C17.99 7.86 19 9.81 19 12C19 15.87 15.87 19 12 19C8.13 19 5 15.87 5 12C5 9.81 6.01 7.86 7.59 6.59L6.17 5.17C4.23 6.82 3 9.26 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 9.26 19.77 6.82 17.83 5.17Z" fill="white"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="pinned-apps">
+                <h3>Fixados</h3>
+                <div class="apps-grid">
+                    <div class="app-item" onclick="openApp('edge')">
+                        <img src="assets/icons/edge.svg" alt="Edge">
+                        <span>Edge</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('calculator')">
+                        <img src="assets/icons/calculator.svg" alt="Calculadora">
+                        <span>Calculadora</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('spotify')">
+                        <img src="assets/icons/spotify.svg" alt="Spotify">
+                        <span>Spotify</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('notepad')">
+                        <img src="assets/icons/notepad.svg" alt="Bloco de Notas">
+                        <span>Bloco de Notas</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('explorer')">
+                        <img src="assets/icons/folder.svg" alt="Explorador">
+                        <span>Explorador</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('settings')">
+                        <img src="assets/icons/settings.svg" alt="Configurações">
+                        <span>Configurações</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('terminal')">
+                        <img src="assets/icons/terminal.svg" alt="Terminal">
+                        <span>Terminal</span>
+                    </div>
+                    <div class="app-item" onclick="openApp('store')">
+                        <img src="assets/icons/store.svg" alt="Loja">
+                        <span>Loja</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommended">
+                <h3>Recomendados</h3>
+                <div class="recent-files">
+                    <div class="recent-item">
+                        <img src="assets/icons/txt.svg" alt="Arquivo">
+                        <div class="recent-info">
+                            <span>relatorio.txt</span>
+                            <small>Há 2 horas</small>
+                        </div>
+                    </div>
+                    <div class="recent-item">
+                        <img src="assets/icons/doc.svg" alt="Documento">
+                        <div class="recent-info">
+                            <span>trabalho.docx</span>
+                            <small>Ontem</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="all-apps">
+                <button>Todos os apps ></button>
+            </div>
+        </div>
+        
+        <!-- Windows Container -->
+        <div id="windows-container" class="windows-container"></div>
+        
+        <!-- Context Menu -->
+        <div id="context-menu" class="context-menu hidden">
+            <div class="menu-item" onclick="createNewFolder()">Nova Pasta</div>
+            <div class="menu-item" onclick="createNewFile()">Novo Arquivo</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="refreshDesktop()">Atualizar</div>
+            <div class="menu-item" onclick="openSettings('display')">Configurações de exibição</div>
+            <div class="menu-item" onclick="openSettings('personalization')">Personalizar</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="openProperties()">Propriedades</div>
+        </div>
+        
+        <!-- Network Popup -->
+        <div id="network-popup" class="system-popup hidden">
+            <h4>Conexões de Rede</h4>
+            <div class="network-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" fill="white"/>
+                    <path d="M7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17C9.24 17 7 14.76 7 12Z" stroke="white" stroke-width="2"/>
+                    <path d="M4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12" stroke="white" stroke-width="2"/>
+                </svg>
+                <span>Wi-Fi Conectado</span>
+            </div>
+            <div class="network-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <rect x="4" y="10" width="4" height="8" fill="white"/>
+                    <rect x="10" y="6" width="4" height="12" fill="white"/>
+                    <rect x="16" y="2" width="4" height="16" fill="white"/>
+                </svg>
+                <span>Ethernet</span>
+            </div>
+        </div>
+        
+        <!-- Volume Popup -->
+        <div id="volume-popup" class="system-popup hidden">
+            <h4>Volume</h4>
+            <input type="range" id="volume-slider" min="0" max="100" value="50">
+            <span id="volume-value">50%</span>
+        </div>
+        
+        <!-- Notification Center -->
+        <div id="notification-center" class="notification-center hidden">
+            <div class="notification-header">
+                <h4>Notificações</h4>
+                <button onclick="clearNotifications()">Limpar todas</button>
+            </div>
+            <div class="notifications-list" id="notifications-list">
+                <div class="notification-item">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#0078D4">
+                        <circle cx="12" cy="12" r="10" fill="#0078D4"/>
+                        <path d="M10 8L16 12L10 16V8Z" fill="white"/>
+                    </svg>
+                    <div class="notification-content">
+                        <strong>Sistema</strong>
+                        <p>Bem-vindo ao Hybrid OS</p>
+                        <small>Agora mesmo</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Templates de Aplicativos (escondidos) -->
+    <div style="display: none;">
+        <!-- Template de Janela -->
+        <div id="window-template" class="window">
+            <div class="window-header">
+                <div class="window-title">
+                    <img class="window-icon" src="" alt="">
+                    <span class="window-title-text"></span>
+                </div>
+                <div class="window-controls">
+                    <button class="minimize-btn">─</button>
+                    <button class="maximize-btn">□</button>
+                    <button class="close-btn">×</button>
+                </div>
+            </div>
+            <div class="window-content"></div>
+        </div>
+        
+        <!-- Calculadora -->
+        <div id="calculator-app" class="app-template">
+            <div class="calculator">
+                <div class="calculator-display">0</div>
+                <div class="calculator-buttons">
+                    <button class="calc-btn clear">C</button>
+                    <button class="calc-btn back">⌫</button>
+                    <button class="calc-btn percent">%</button>
+                    <button class="calc-btn operator">/</button>
+                    <button class="calc-btn number">7</button>
+                    <button class="calc-btn number">8</button>
+                    <button class="calc-btn number">9</button>
+                    <button class="calc-btn operator">*</button>
+                    <button class="calc-btn number">4</button>
+                    <button class="calc-btn number">5</button>
+                    <button class="calc-btn number">6</button>
+                    <button class="calc-btn operator">-</button>
+                    <button class="calc-btn number">1</button>
+                    <button class="calc-btn number">2</button>
+                    <button class="calc-btn number">3</button>
+                    <button class="calc-btn operator">+</button>
+                    <button class="calc-btn number zero">0</button>
+                    <button class="calc-btn number">.</button>
+                    <button class="calc-btn equals">=</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bloco de Notas -->
+        <div id="notepad-app" class="app-template">
+            <div class="notepad">
+                <div class="notepad-toolbar">
+                    <button>Arquivo</button>
+                    <button>Editar</button>
+                    <button>Formatar</button>
+                    <button>Exibir</button>
+                    <button>Ajuda</button>
+                </div>
+                <textarea class="notepad-content" placeholder="Digite aqui..."></textarea>
+                <div class="notepad-status">Linha 1, Coluna 1</div>
+            </div>
+        </div>
+        
+        <!-- Explorador de Arquivos -->
+        <div id="explorer-app" class="app-template">
+            <div class="explorer">
+                <div class="explorer-toolbar">
+                    <button>←</button>
+                    <button>→</button>
+                    <button>↻</button>
+                    <input type="text" class="address-bar" value="Este Computador > Documentos">
+                    <button>🔍</button>
+                </div>
+                <div class="explorer-content">
+                    <div class="explorer-sidebar">
+                        <div class="sidebar-item active">Área de Trabalho</div>
+                        <div class="sidebar-item">Downloads</div>
+                        <div class="sidebar-item">Documentos</div>
+                        <div class="sidebar-item">Imagens</div>
+                        <div class="sidebar-item">Músicas</div>
+                        <div class="sidebar-item">Vídeos</div>
+                        <div class="sidebar-divider"></div>
+                        <div class="sidebar-item">Este Computador</div>
+                        <div class="sidebar-item">Disco Local (C:)</div>
+                        <div class="sidebar-item">Disco Dados (D:)</div>
+                    </div>
+                    <div class="explorer-main" id="explorer-main">
+                        <div class="folder-item" ondblclick="openFolder('documentos')">
+                            <svg width="48" height="48" viewBox="0 0 24 24">
+                                <path d="M20 6H12L10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6Z" fill="#FFD966"/>
+                            </svg>
+                            <span>Documentos</span>
+                        </div>
+                        <div class="folder-item" ondblclick="openFolder('imagens')">
+                            <svg width="48" height="48" viewBox="0 0 24 24">
+                                <path d="M20 6H12L10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6Z" fill="#FFD966"/>
+                            </svg>
+                            <span>Imagens</span>
+                        </div>
+                        <div class="file-item" ondblclick="openFile('relatorio.txt')">
+                            <svg width="48" height="48" viewBox="0 0 24 24">
+                                <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" fill="#E6E6E6"/>
+                                <path d="M14 2V8H20" fill="#C0C0C0"/>
+                            </svg>
+                            <span>relatorio.txt</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="explorer-status">1 item</div>
+            </div>
+        </div>
+        
+        <!-- Configurações -->
+        <div id="settings-app" class="app-template">
+            <div class="settings">
+                <div class="settings-sidebar">
+                    <div class="settings-category active" data-category="system">Sistema</div>
+                    <div class="settings-category" data-category="devices">Dispositivos</div>
+                    <div class="settings-category" data-category="network">Rede e Internet</div>
+                    <div class="settings-category" data-category="personalization">Personalização</div>
+                    <div class="settings-category" data-category="accounts">Contas</div>
+                    <div class="settings-category" data-category="about">Sobre</div>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-page" id="settings-system">
+                        <h2>Sistema</h2>
+                        <div class="settings-item">
+                            <span>Tela</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Som</span>
+                            <span>50%</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Notificações</span>
+                            <span>Ativadas</span>
+                        </div>
+                    </div>
+                    <div class="settings-page hidden" id="settings-about">
+                        <h2>Sobre</h2>
+                        <div class="settings-item">
+                            <span>Disco</span>
+                            <span>2TB (1.8TB livre)</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Processador</span>
+                            <span>Intel Core i7-12700K</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Memória RAM</span>
+                            <span>32GB</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Sistema</span>
+                            <span>Hybrid OS v1.0</span>
+                        </div>
+                        <div class="settings-item">
+                            <span>Nome do dispositivo</span>
+                            <span>JOÃO-PC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terminal Linux -->
+        <div id="terminal-app" class="app-template">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>joão@hybrid-os: ~</span>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-line">Bem-vindo ao Hybrid OS Linux Terminal</div>
+                    <div class="terminal-line">joão@hybrid-os:~$ <span contenteditable="true" class="terminal-input" id="terminal-input">help</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script src="js/apps.js"></script>
+    <script src="js/fileSystem.js"></script>
+</body>
+</html>
